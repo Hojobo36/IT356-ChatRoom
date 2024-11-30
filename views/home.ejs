@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Room</title>
+
+  <style id="theme-styles">
+    /* Default (Light Mode) Styles */
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #ffffff;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+    }
+
+    h1 {
+      color: #00e676;
+      font-size: 2rem;
+      margin-top: 20px;
+    }
+
+    .chat-container {
+      background-color: #f5f5f5;
+      width: 90%;
+      max-width: 600px;
+      margin-top: 30px;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      overflow-y: auto; /* Enables scrolling when content overflows */
+      max-height: 400px; /* Set a max height for the container */
+    }
+
+    .message {
+      background-color: #ffffff;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .message h2 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: #333;
+    }
+
+    .message p {
+      margin: 5px 0;
+      font-size: 0.9rem;
+      color: #777;
+    }
+
+    .form-container {
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+      width: 90%;
+      max-width: 600px;
+    }
+
+    .form-container input {
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #fff;
+      color: #333;
+      font-size: 1rem;
+    }
+
+    .form-container input:focus {
+      outline: none;
+      border-color: #00e676;
+    }
+
+    .form-container button {
+      background-color: #00e676;
+      color: white;
+      padding: 10px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .form-container button:hover {
+      background-color: #00b359;
+    }
+
+    .toggle-btn {
+      background-color: #00e676;
+      color: white;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+
+    .toggle-btn:hover {
+      background-color: #00b359;
+    }
+
+    /* Dark Mode Styles */
+    body.dark-mode {
+      background-color: #121212; /* Dark background color */
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .chat-container {
+      background-color: #1e1e1e; /* Dark chat container */
+    }
+
+    body.dark-mode .message {
+      background-color: #333; /* Dark messages */
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .message h2 {
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .message p {
+      color: #bdbdbd;
+    }
+
+    body.dark-mode .form-container input {
+      background-color: #333;
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .form-container button {
+      background-color: #00e676;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<h1>Welcome to the Chat Room</h1>
+
+<div class="chat-container">
+  <% data.forEach(element => { %>
+    <div class="message">
+      <h2><%= element.userMessage %></h2>
+      <p>by <%= element.userName %></p>
+    </div>
+  <% }) %>
+</div>
+
+<div class="form-container">
+  <h2>Add a Message</h2>
+  <form action="/" method="post">
+    <input type="text" placeholder="Your Name" name="userName" required>
+    <input type="text" placeholder="Type a message..." name="userMessage" required>
+    <button type="submit">Send</button>
+  </form>
+</div>
+
+<button class="toggle-btn" id="toggle-theme-btn">Switch to Dark Mode</button>
+
+<script>
+  // Check if the user has a saved theme preference in localStorage
+  const currentTheme = localStorage.getItem('theme') || 'light';
+
+  if (currentTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    document.getElementById('toggle-theme-btn').textContent = 'Switch to Light Mode';
+  }
+
+  // Add event listener for theme toggle button
+  document.getElementById('toggle-theme-btn').addEventListener('click', function () {
+    const bodyClass = document.body.classList;
+
+    if (bodyClass.contains('dark-mode')) {
+      bodyClass.remove('dark-mode');
+      localStorage.setItem('theme', 'light');
+      this.textContent = 'Switch to Dark Mode';
+    } else {
+      bodyClass.add('dark-mode');
+      localStorage.setItem('theme', 'dark');
+      this.textContent = 'Switch to Light Mode';
+    }
+  });
+</script>
+
+</body>
+
+</html>
