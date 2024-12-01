@@ -1,6 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+
+  // Listen for new messages
+  socket.on('newMessage', (message) => {
+    const messagesDiv = document.getElementById('messages');
+
+    // Create a new message element
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add('message');
+    messageDiv.innerHTML = `<h2>${message.userMessage}</h2><p>by ${message.userName}</p>`;
+
+    // Append the new message to the messages container
+    messagesDiv.appendChild(messageDiv);
+  });
+</script>
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,22 +53,27 @@
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+      max-height: 400px;
     }
 
     #messages {
+      width: 66%; /* Fixed width as 66% of the page */
       max-height: 400px;
       overflow-y: auto;
       border: 1px solid #ccc;
       padding: 10px;
       margin: 20px 0;
-      background-color: #ffffff;
-      color: #333;
+      background-color: var(--bg-color-secondary);
+      color: var(--text-color);
       border-radius: 8px;
+      box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
     }
 
     .message {
       background-color: #ffffff;
       padding: 10px;
+      margin: 10px 0;
       margin-bottom: 15px;
       border-radius: 5px;
       box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
@@ -132,13 +155,8 @@
       background-color: #1e1e1e;
     }
 
-    body.dark-mode #messages {
-      background-color: #333;
-      color: #e0e0e0;
-    }
-
     body.dark-mode .message {
-      background-color: #444;
+      background-color: #333;
       color: #e0e0e0;
     }
 
@@ -185,26 +203,7 @@
 
 <button class="toggle-btn" id="toggle-theme-btn">Switch to Dark Mode</button>
 
-<script src="/socket.io/socket.io.js"></script>
 <script>
-  const socket = io();
-
-  // Listen for new messages
-  socket.on('newMessage', (message) => {
-    const messagesDiv = document.getElementById('messages');
-
-    // Create a new message element
-    const messageDiv = document.createElement('div');
-    messageDiv.classList.add('message');
-    messageDiv.innerHTML = `<h2>${message.userMessage}</h2><p>by ${message.userName}</p>`;
-
-    // Append the new message to the messages container
-    messagesDiv.appendChild(messageDiv);
-
-    // Scroll to the bottom of the messages container
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  });
-
   // Check if the user has a saved theme preference in localStorage
   const currentTheme = localStorage.getItem('theme') || 'light';
 
