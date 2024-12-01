@@ -16,6 +16,25 @@
 
     // Append the new message to the messages container
     messagesDiv.appendChild(messageDiv);
+
+    // Scroll to the bottom of the messages container
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  });
+
+  // Persist user name in localStorage
+  window.addEventListener('DOMContentLoaded', () => {
+    const nameInput = document.querySelector('input[name="userName"]');
+
+    // Load saved name if it exists
+    const savedName = localStorage.getItem('userName');
+    if (savedName) {
+      nameInput.value = savedName;
+    }
+
+    // Save the name to localStorage whenever it changes
+    nameInput.addEventListener('input', () => {
+      localStorage.setItem('userName', nameInput.value);
+    });
   });
 </script>
 
@@ -23,9 +42,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat Room</title>
-
-  <style id="theme-styles">
-    /* Default (Light Mode) Styles */
+  <style>
     body {
       font-family: 'Arial', sans-serif;
       background-color: #ffffff;
@@ -47,27 +64,26 @@
 
     .chat-container {
       background-color: #f5f5f5;
-      width: 90%;
-      max-width: 600px;
+      width: 66%; /* Fixed width of chat box */
+      max-width: 800px;
       margin-top: 30px;
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      overflow-y: auto;
-      max-height: 400px;
+      overflow-y: auto; /* Enables scrolling when content overflows */
+      max-height: 400px; /* Set a max height for the container */
     }
 
     #messages {
-      width: 66%; /* Fixed width as 66% of the page */
-      max-height: 400px;
-      overflow-y: auto;
+      width: 50%;
+      max-height: 400px; /* Adjust this to set the visible height of the messages box */
+      overflow-y: auto; /* Ensures the box becomes scrollable if content exceeds max height */
       border: 1px solid #ccc;
       padding: 10px;
       margin: 20px 0;
-      background-color: var(--bg-color-secondary);
-      color: var(--text-color);
+      background-color: #ffffff;
+      color: #333;
       border-radius: 8px;
-      box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
     }
 
     .message {
@@ -95,8 +111,8 @@
       display: flex;
       flex-direction: column;
       margin-top: 20px;
-      width: 90%;
-      max-width: 600px;
+      width: 66%;
+      max-width: 800px;
     }
 
     .form-container input {
@@ -145,7 +161,6 @@
       background-color: #00b359;
     }
 
-    /* Dark Mode Styles */
     body.dark-mode {
       background-color: #121212;
       color: #e0e0e0;
@@ -155,17 +170,14 @@
       background-color: #1e1e1e;
     }
 
-    body.dark-mode .message {
+    body.dark-mode #messages {
       background-color: #333;
       color: #e0e0e0;
     }
 
-    body.dark-mode .message h2 {
+    body.dark-mode .message {
+      background-color: #444;
       color: #e0e0e0;
-    }
-
-    body.dark-mode .message p {
-      color: #bdbdbd;
     }
 
     body.dark-mode .form-container input {
@@ -180,7 +192,6 @@
 </head>
 
 <body>
-
 <h1>Welcome to the Chat Room</h1>
 
 <div id="messages">
@@ -204,7 +215,6 @@
 <button class="toggle-btn" id="toggle-theme-btn">Switch to Dark Mode</button>
 
 <script>
-  // Check if the user has a saved theme preference in localStorage
   const currentTheme = localStorage.getItem('theme') || 'light';
 
   if (currentTheme === 'dark') {
@@ -212,7 +222,6 @@
     document.getElementById('toggle-theme-btn').textContent = 'Switch to Light Mode';
   }
 
-  // Add event listener for theme toggle button
   document.getElementById('toggle-theme-btn').addEventListener('click', function () {
     const bodyClass = document.body.classList;
 
@@ -227,7 +236,6 @@
     }
   });
 </script>
-
 </body>
 
 </html>
