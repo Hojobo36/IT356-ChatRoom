@@ -56,6 +56,37 @@ io.on('connection', (socket) => {
     });
 });
 
+// Socket.IO logic for updating messages and checking scroll position
+io.on('connection', (socket) => {
+    console.log('A user connected');
+
+    socket.on('newMessage', (message) => {
+        const messagesDiv = document.getElementById('messages');
+
+        // Create a new message element
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message');
+        messageDiv.innerHTML = `<h2>${message.userMessage}</h2><p>by ${message.userName}</p>`;
+
+        // Append the new message to the messages container
+        messagesDiv.appendChild(messageDiv);
+
+        // Check if we're already at the bottom
+        const isAtBottom = messagesDiv.scrollHeight - messagesDiv.scrollTop === messagesDiv.clientHeight;
+
+        // Wait until the DOM is updated before scrolling to the bottom
+        setTimeout(() => {
+            if (isAtBottom) {
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }
+        }, 0);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('A user disconnected');
+    });
+});
+
 server.listen(3000, () => {
     console.log("App is running on port 3000");
 });
