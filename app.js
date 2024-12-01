@@ -63,6 +63,9 @@ io.on('connection', (socket) => {
     socket.on('newMessage', (message) => {
         const messagesDiv = document.getElementById('messages');
 
+        // Check if the user is at the bottom before adding a new message
+        const isAtBottom = messagesDiv.scrollHeight - messagesDiv.scrollTop === messagesDiv.clientHeight;
+
         // Create a new message element
         const messageDiv = document.createElement('div');
         messageDiv.classList.add('message');
@@ -71,15 +74,13 @@ io.on('connection', (socket) => {
         // Append the new message to the messages container
         messagesDiv.appendChild(messageDiv);
 
-        // Check if we're already at the bottom
-        const isAtBottom = messagesDiv.scrollHeight - messagesDiv.scrollTop === messagesDiv.clientHeight;
-
-        // Wait until the DOM is updated before scrolling to the bottom
-        setTimeout(() => {
-            if (isAtBottom) {
+        // Only scroll to the bottom if the user was at the bottom before the new message was added
+        if (isAtBottom) {
+            // Use requestAnimationFrame to wait until the DOM is fully updated
+            requestAnimationFrame(() => {
                 messagesDiv.scrollTop = messagesDiv.scrollHeight;
-            }
-        }, 0);
+            });
+        }
     });
 
     socket.on('disconnect', () => {
