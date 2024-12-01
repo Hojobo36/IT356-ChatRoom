@@ -17,8 +17,10 @@
     // Append the new message to the messages container
     messagesDiv.appendChild(messageDiv);
 
-    // Scroll to the bottom of the messages container after a new message is added
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    // Wait until the DOM is updated before scrolling to the bottom
+    setTimeout(() => {
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }, 0);
   });
 
   // Persist user name in localStorage
@@ -37,6 +39,7 @@
     });
   });
 </script>
+
 
 
 <head>
