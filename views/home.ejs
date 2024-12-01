@@ -17,8 +17,10 @@
     // Append the new message to the messages container
     messagesDiv.appendChild(messageDiv);
 
-    // Scroll to the bottom
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    // Scroll to the bottom if the user is already at the bottom
+    if (messagesDiv.scrollHeight - messagesDiv.scrollTop === messagesDiv.clientHeight) {
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
   });
 
   // Persist user name in localStorage
@@ -68,6 +70,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat Room</title>
   <style>
+    /* General Body and Text Styling */
     body {
       font-family: 'Arial', sans-serif;
       background-color: #ffffff;
@@ -79,6 +82,7 @@
       align-items: center;
       justify-content: flex-start;
       min-height: 100vh;
+      overflow: hidden; /* Prevent multiple scrollbars */
     }
 
     h1 {
@@ -87,6 +91,7 @@
       margin-top: 20px;
     }
 
+    /* Chat Container */
     .chat-container {
       background-color: #f5f5f5;
       width: 66%; /* Fixed width of chat box */
@@ -95,14 +100,12 @@
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      overflow-y: auto; /* Enables scrolling when content overflows */
-      max-height: 400px; /* Set a max height for the container */
+      overflow-y: auto;
     }
 
     #messages {
-      width: 40%;
-      max-height: 400px; /* Adjust this to set the visible height of the messages box */
-      overflow-y: auto; /* Ensures the box becomes scrollable if content exceeds max height */
+      max-height: 400px; /* Max height for the messages box */
+      overflow-y: auto; /* Enables scrolling when content overflows */
       border: 1px solid #ccc;
       padding: 10px;
       margin: 20px 0;
@@ -111,6 +114,7 @@
       border-radius: 8px;
     }
 
+    /* Message Styling */
     .message {
       background-color: #ffffff;
       padding: 10px;
@@ -132,10 +136,11 @@
       color: #777;
     }
 
+    /* Form Styling */
     .form-container {
       display: flex;
       flex-direction: column;
-      align-items: center; /* Center the form */
+      align-items: center;
       justify-content: center;
       margin-top: 20px;
       width: 66%;
@@ -150,8 +155,8 @@
       background-color: #fff;
       color: #333;
       font-size: 1rem;
-      width: 100%; /* Make the input fields take up full width of the container */
-      max-width: 500px; /* Add max-width to prevent them from becoming too wide */
+      width: 100%;
+      max-width: 500px;
       box-sizing: border-box;
     }
 
@@ -168,9 +173,9 @@
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      width: 100%; /* Make the button take up full width of the container */
-      max-width: 500px; /* Add max-width to prevent them from becoming too wide */
-      margin-top: 10px; /* Adds spacing between the button and input fields */
+      width: 100%;
+      max-width: 500px;
+      margin-top: 10px;
       box-sizing: border-box;
     }
 
@@ -178,6 +183,7 @@
       background-color: #00b359;
     }
 
+    /* Dark Mode Button */
     .toggle-btn {
       background-color: #00e676;
       color: white;
@@ -195,6 +201,7 @@
       background-color: #00b359;
     }
 
+    /* Dark Mode Styling */
     body.dark-mode {
       background-color: #121212;
       color: #e0e0e0;
@@ -234,25 +241,52 @@
 </head>
 
 <body>
-<h1>Chat Room</h1>
+<h1>Welcome to the Chat Room</h1>
+
 <div class="chat-container">
   <div id="messages">
-    <% data.forEach(function(message) { %>
+    <% data.forEach(element => { %>
       <div class="message">
-        <h2><%= message.userMessage %></h2>
-        <p>by <%= message.userName %></p>
+        <h2><%= element.userMessage %></h2>
+        <p>by <%= element.userName %></p>
       </div>
-    <% }); %>
+    <% }) %>
   </div>
 </div>
 
 <div class="form-container">
-  <form method="POST" action="/">
-    <input type="text" name="userName" placeholder="Enter your name" required>
-    <input type="text" name="userMessage" placeholder="Type your message" required>
+  <h2>Add a Message</h2>
+  <form action="/" method="post">
+    <input type="text" placeholder="Your Name" name="userName" required>
+    <input type="text" placeholder="Type a message..." name="userMessage" required>
     <button type="submit">Send</button>
   </form>
 </div>
+
+<button class="toggle-btn" id="toggle-theme-btn">Switch to Dark Mode</button>
+
+<script>
+  const currentTheme = localStorage.getItem('theme') || 'light';
+
+  if (currentTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    document.getElementById('toggle-theme-btn').textContent = 'Switch to Light Mode';
+  }
+
+  document.getElementById('toggle-theme-btn').addEventListener('click', function () {
+    const bodyClass = document.body.classList;
+
+    if (bodyClass.contains('dark-mode')) {
+      bodyClass.remove('dark-mode');
+      localStorage.setItem('theme', 'light');
+      this.textContent = 'Switch to Dark Mode';
+    } else {
+      bodyClass.add('dark-mode');
+      localStorage.setItem('theme', 'dark');
+      this.textContent = 'Switch to Light Mode';
+    }
+  });
+</script>
 </body>
 
 </html>
