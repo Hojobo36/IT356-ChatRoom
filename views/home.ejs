@@ -17,10 +17,8 @@
     // Append the new message to the messages container
     messagesDiv.appendChild(messageDiv);
 
-    // Scroll to the bottom if the user is already at the bottom
-    if (messagesDiv.scrollHeight - messagesDiv.scrollTop === messagesDiv.clientHeight) {
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    }
+    // Scroll to the bottom
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
   });
 
   // Persist user name in localStorage
@@ -236,50 +234,25 @@
 </head>
 
 <body>
-<h1>Welcome to the Chat Room</h1>
-
-<div id="messages">
-  <% data.forEach(element => { %>
-    <div class="message">
-      <h2><%= element.userMessage %></h2>
-      <p>by <%= element.userName %></p>
-    </div>
-  <% }) %>
+<h1>Chat Room</h1>
+<div class="chat-container">
+  <div id="messages">
+    <% data.forEach(function(message) { %>
+      <div class="message">
+        <h2><%= message.userMessage %></h2>
+        <p>by <%= message.userName %></p>
+      </div>
+    <% }); %>
+  </div>
 </div>
 
 <div class="form-container">
-  <h2>Add a Message</h2>
-  <form action="/" method="post">
-    <input type="text" placeholder="Your Name" name="userName" required>
-    <input type="text" placeholder="Type a message..." name="userMessage" required>
+  <form method="POST" action="/">
+    <input type="text" name="userName" placeholder="Enter your name" required>
+    <input type="text" name="userMessage" placeholder="Type your message" required>
     <button type="submit">Send</button>
   </form>
 </div>
-
-<button class="toggle-btn" id="toggle-theme-btn">Switch to Dark Mode</button>
-
-<script>
-  const currentTheme = localStorage.getItem('theme') || 'light';
-
-  if (currentTheme === 'dark') {
-    document.body.classList.add('dark-mode');
-    document.getElementById('toggle-theme-btn').textContent = 'Switch to Light Mode';
-  }
-
-  document.getElementById('toggle-theme-btn').addEventListener('click', function () {
-    const bodyClass = document.body.classList;
-
-    if (bodyClass.contains('dark-mode')) {
-      bodyClass.remove('dark-mode');
-      localStorage.setItem('theme', 'light');
-      this.textContent = 'Switch to Dark Mode';
-    } else {
-      bodyClass.add('dark-mode');
-      localStorage.setItem('theme', 'dark');
-      this.textContent = 'Switch to Light Mode';
-    }
-  });
-</script>
 </body>
 
 </html>
