@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+
+  // Listen for new messages
+  socket.on('newMessage', (message) => {
+    const messagesDiv = document.getElementById('messages');
+
+    // Create a new message element
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add('message');
+    messageDiv.innerHTML = `<h2>${message.userMessage}</h2><p>by ${message.userName}</p>`;
+
+    // Append the new message to the messages container
+    messagesDiv.appendChild(messageDiv);
+  });
+</script>
+
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -152,7 +171,7 @@
 
 <h1>Welcome to the Chat Room</h1>
 
-<div class="chat-container">
+<div id="messages">
   <% data.forEach(element => { %>
     <div class="message">
       <h2><%= element.userMessage %></h2>
