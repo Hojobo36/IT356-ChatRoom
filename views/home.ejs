@@ -259,7 +259,26 @@
 <button class="toggle-btn" id="toggle-theme-btn">Switch to Dark Mode</button>
 
 <script>
-  // Dark mode toggle script as before...
+  const currentTheme = localStorage.getItem('theme') || 'light';
+
+  if (currentTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    document.getElementById('toggle-theme-btn').textContent = 'Switch to Light Mode';
+  }
+
+  document.getElementById('toggle-theme-btn').addEventListener('click', function () {
+    const bodyClass = document.body.classList;
+
+    if (bodyClass.contains('dark-mode')) {
+      bodyClass.remove('dark-mode');
+      localStorage.setItem('theme', 'light');
+      this.textContent = 'Switch to Dark Mode';
+    } else {
+      bodyClass.add('dark-mode');
+      localStorage.setItem('theme', 'dark');
+      this.textContent = 'Switch to Light Mode';
+    }
+  });
 </script>
 </body>
 
