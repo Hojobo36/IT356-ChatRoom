@@ -17,10 +17,12 @@
     // Append the new message to the messages container
     messagesDiv.appendChild(messageDiv);
 
-    // Scroll to the bottom if the user is already at the bottom
-    if (messagesDiv.scrollHeight - messagesDiv.scrollTop === messagesDiv.clientHeight) {
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    }
+    // Scroll to the bottom if the user is at the bottom of the messages container
+    setTimeout(() => {
+      if (messagesDiv.scrollHeight - messagesDiv.scrollTop === messagesDiv.clientHeight) {
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
+    }, 100); // Delay to ensure the message has been added before checking scroll
   });
 
   // Persist user name in localStorage
