@@ -75,7 +75,7 @@
     }
 
     #messages {
-      width: 33%;
+      width: 40%;
       max-height: 400px; /* Adjust this to set the visible height of the messages box */
       overflow-y: auto; /* Ensures the box becomes scrollable if content exceeds max height */
       border: 1px solid #ccc;
@@ -127,6 +127,7 @@
       font-size: 1rem;
       width: 100%; /* Make the input fields take up full width of the container */
       max-width: 500px; /* Add max-width to prevent them from becoming too wide */
+      box-sizing: border-box;
     }
 
     .form-container input:focus {
@@ -144,6 +145,8 @@
       cursor: pointer;
       width: 100%; /* Make the button take up full width of the container */
       max-width: 500px; /* Add max-width to prevent them from becoming too wide */
+      margin-top: 10px; /* Adds spacing between the button and input fields */
+      box-sizing: border-box;
     }
 
     .form-container button:hover {
