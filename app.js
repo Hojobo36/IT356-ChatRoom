@@ -1,12 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
-const http = require('http'); // Required to create a server for Socket.IO
+const http = require('http');
 const socketIo = require('socket.io');
 
 const app = express();
-const server = http.createServer(app); // Create an HTTP server
-const io = socketIo(server); // Attach Socket.IO to the server
+const server = http.createServer(app);
+const io = socketIo(server);
 
 const messagesFile = './messages.json';
 
@@ -28,12 +28,10 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Serve the home page
 app.get("/", function (req, res) {
     res.render("home", { data: users });
 });
 
-// Handle new messages
 app.post("/", (req, res) => {
     const inputUserName = req.body.userName;
     const inputUserMessage = req.body.userMessage;
@@ -56,15 +54,10 @@ io.on('connection', (socket) => {
     });
 });
 
-// Socket.IO logic for updating messages and checking scroll position
+// Handle new messages from the server
 io.on('connection', (socket) => {
-    console.log('A user connected');
-
     socket.on('newMessage', (message) => {
         const messagesDiv = document.getElementById('messages');
-
-        // Check if the user is at the bottom before adding a new message
-        const isAtBottom = messagesDiv.scrollHeight - messagesDiv.scrollTop === messagesDiv.clientHeight;
 
         // Create a new message element
         const messageDiv = document.createElement('div');
@@ -74,13 +67,8 @@ io.on('connection', (socket) => {
         // Append the new message to the messages container
         messagesDiv.appendChild(messageDiv);
 
-        // Only scroll to the bottom if the user was at the bottom before the new message was added
-        if (isAtBottom) {
-            // Use requestAnimationFrame to wait until the DOM is fully updated
-            requestAnimationFrame(() => {
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
-            });
-        }
+        // Let the browser handle scrolling as usual, no need to adjust scroll position
+        // This approach simply adds the message and relies on the browser's natural scrolling behavior
     });
 
     socket.on('disconnect', () => {

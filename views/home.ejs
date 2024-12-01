@@ -17,10 +17,6 @@
     // Append the new message to the messages container
     messagesDiv.appendChild(messageDiv);
 
-    // Wait until the DOM is updated before scrolling to the bottom
-    setTimeout(() => {
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    }, 0);
   });
 
   // Persist user name in localStorage
